@@ -56,6 +56,8 @@ def edit(id):
         conn.close()
         return redirect(url_for('index'))
 
+        
+
     task = conn.execute(
         'SELECT * FROM tasks WHERE id = ?',
         (id,)
