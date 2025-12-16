@@ -1,29 +1,86 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Flask To-Do</title>
+    <meta charset="UTF-8">
+    <title>Flask To-Do App</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            width: 400px;
+            margin: 40px auto;
+        }
+        h2 {
+            text-align: center;
+        }
+        form {
+            display: flex;
+            gap: 5px;
+            margin-bottom: 15px;
+        }
+        input[type="text"] {
+            flex: 1;
+            padding: 5px;
+        }
+        button {
+            padding: 5px 10px;
+            cursor: pointer;
+        }
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+        li {
+            padding: 6px;
+            border-bottom: 1px solid #ddd;
+        }
+        .done {
+            color: gray;
+            text-decoration: line-through;
+        }
+        .stats {
+            text-align: center;
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+        a {
+            margin-left: 5px;
+            text-decoration: none;
+        }
+    </style>
 </head>
 <body>
-    <h2>To-Do List</h2>
 
+    <h2>📝 Flask To-Do List</h2>
+
+    <!-- Task statistics -->
+    <div class="stats">
+        Total Tasks: <strong>{{ total }}</strong> |
+        Completed: <strong>{{ completed }}</strong>
+    </div>
+
+    <!-- Add task form -->
     <form action="/add" method="post">
-        <input type="text" name="task" required>
+        <input type="text" name="task" placeholder="Enter new task" required>
         <button type="submit">Add</button>
     </form>
 
+    <!-- Task list -->
     <ul>
         {% for task in tasks %}
             <li>
-                {% if task.done %}
-                    <strike>{{ task.content }}</strike>
-                {% else %}
+                <span class="{% if task.done %}done{% endif %}">
                     {{ task.content }}
+                </span>
+
+                {% if not task.done %}
+                    <a href="/done/{{ task.id }}">✔</a>
                 {% endif %}
-                <a href="/done/{{ task.id }}">✔</a>
+
                 <a href="/edit/{{ task.id }}">✏️</a>
-                <a href="/delete/{{ task.id }}">❌</a>
+                <a href="/delete/{{ task.id }}" onclick="return confirm('Delete this task?');">❌</a>
             </li>
         {% endfor %}
     </ul>
+
 </body>
 </html>

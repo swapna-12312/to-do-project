@@ -8,12 +8,24 @@ def get_db_connection():
     conn.row_factory = sqlite3.Row
     return conn
 
+
 @app.route('/')
 def index():
     conn = get_db_connection()
     tasks = conn.execute('SELECT * FROM tasks').fetchall()
+
+    total = conn.execute('SELECT COUNT(*) FROM tasks').fetchone()[0]
+    completed = conn.execute(
+        'SELECT COUNT(*) FROM tasks WHERE done = 1'
+    ).fetchone()[0]
+
     conn.close()
-    return render_template('index.html', tasks=tasks)
+    return render_template(
+        'index.html',
+        tasks=tasks,
+        total=total,
+        completed=completed
+    )
 
 
 
@@ -56,7 +68,7 @@ def edit(id):
         conn.close()
         return redirect(url_for('index'))
 
-        
+
 
     task = conn.execute(
         'SELECT * FROM tasks WHERE id = ?',
