@@ -20,6 +20,7 @@
                     {{ task.content }}
                 {% endif %}
                 <a href="/done/{{ task.id }}">✔</a>
+                <a href="/edit/{{ task.id }}">✏️</a>
                 <a href="/delete/{{ task.id }}">❌</a>
             </li>
         {% endfor %}

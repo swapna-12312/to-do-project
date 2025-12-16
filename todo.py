@@ -16,7 +16,7 @@ def index():
     return render_template('index.html', tasks=tasks)
 
 
-    
+
 
 @app.route('/add', methods=['POST'])
 def add():
@@ -42,6 +42,28 @@ def delete(id):
     conn.commit()
     conn.close()
     return redirect(url_for('index'))
+@app.route('/edit/<int:id>', methods=['GET', 'POST'])
+def edit(id):
+    conn = get_db_connection()
+
+    if request.method == 'POST':
+        new_content = request.form['task']
+        conn.execute(
+            'UPDATE tasks SET content = ? WHERE id = ?',
+            (new_content, id)
+        )
+        conn.commit()
+        conn.close()
+        return redirect(url_for('index'))
+
+    task = conn.execute(
+        'SELECT * FROM tasks WHERE id = ?',
+        (id,)
+    ).fetchone()
+    conn.close()
+
+    return render_template('edit.html', task=task)
+
 
 if __name__ == '__main__':
     app.run(debug=True)
