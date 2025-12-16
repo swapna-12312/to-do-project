@@ -15,6 +15,9 @@ def index():
     conn.close()
     return render_template('index.html', tasks=tasks)
 
+
+    
+
 @app.route('/add', methods=['POST'])
 def add():
     task = request.form['task']
